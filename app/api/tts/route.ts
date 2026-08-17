@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse, type NextRequest } from 'next/server';
 import { z } from 'zod';
 
-import { ApiErrorResponse } from '../../../types/api';
+import type { ApiErrorResponse } from '../../../types/api';
 
 const ttsSchema = z.object({
   text: z
@@ -17,7 +17,36 @@ const ttsSchema = z.object({
     .optional(),
 });
 
-// test voice from ElevenLabs
+function errorResponse(error: string, status: number, details?: unknown) {
+  const response: ApiErrorResponse =
+    details === undefined ? { error } : { error, details };
+
+  return NextResponse.json(response, { status });
+}
+
+function getElevenLabsErrorMessage(data: unknown, fallback: string): string {
+  if (typeof data !== 'object' || data === null) {
+    return fallback;
+  }
+
+  if (
+    'detail' in data &&
+    typeof data.detail === 'object' &&
+    data.detail !== null
+  ) {
+    if ('message' in data.detail && typeof data.detail.message === 'string') {
+      return data.detail.message;
+    }
+  }
+
+  if ('message' in data && typeof data.message === 'string') {
+    return data.message;
+  }
+
+  return fallback;
+}
+
+// Default ElevenLabs voice.
 const DEFAULT_VOICE_ID = 'BLvmaUADnsV2R6TtX00O';
 
 export async function POST(req: NextRequest) {
@@ -26,23 +55,16 @@ export async function POST(req: NextRequest) {
   try {
     body = await req.json();
   } catch {
-    return NextResponse.json(
-      {
-        error: 'Invalid JSON request body',
-      } as ApiErrorResponse,
-      { status: 400 }
-    );
+    return errorResponse('Invalid JSON request body', 400);
   }
 
   try {
     const parsed = ttsSchema.safeParse(body);
     if (!parsed.success) {
-      return NextResponse.json(
-        {
-          error: 'Validation error',
-          details: z.treeifyError(parsed.error),
-        } as ApiErrorResponse,
-        { status: 400 }
+      return errorResponse(
+        'Validation error',
+        400,
+        z.treeifyError(parsed.error)
       );
     }
 
@@ -51,12 +73,7 @@ export async function POST(req: NextRequest) {
 
     const apiKey = process.env.ELEVENLABS_API_KEY;
     if (!apiKey) {
-      return NextResponse.json(
-        {
-          error: 'Server configuration error: missing API key',
-        } as ApiErrorResponse,
-        { status: 500 }
-      );
+      return errorResponse('Server configuration error: missing API key', 500);
     }
 
     const response = await fetch(
@@ -76,12 +93,9 @@ export async function POST(req: NextRequest) {
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => null);
-      return NextResponse.json(
-        {
-          error: 'ElevenLabs API Error',
-          details: errorData || response.statusText,
-        } as ApiErrorResponse,
-        { status: response.status }
+      return errorResponse(
+        getElevenLabsErrorMessage(errorData, response.statusText),
+        response.status
       );
     }
 
@@ -91,11 +105,9 @@ export async function POST(req: NextRequest) {
       },
     });
   } catch {
-    return NextResponse.json(
-      {
-        error: 'Unable to generate speech. Please try again later.',
-      } as ApiErrorResponse,
-      { status: 500 }
+    return errorResponse(
+      'Unable to generate speech. Please try again later.',
+      500
     );
   }
 }
