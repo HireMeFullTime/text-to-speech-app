@@ -18,7 +18,7 @@ const ttsSchema = z.object({
 });
 
 // test voice from ElevenLabs
-const DEFAULT_VOICE_ID = '3JMeckmG8B7F6MuYAWyF';
+const DEFAULT_VOICE_ID = 'BLvmaUADnsV2R6TtX00O';
 
 export async function POST(req: NextRequest) {
   let body: unknown;
