@@ -1,36 +1,83 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Text to Speech App
 
-## Getting Started
+A simple Next.js application that converts pasted text into speech with the ElevenLabs Text-to-Speech API. Users can listen to the generated audio in the browser and use the native audio controls to download it.
 
-First, run the development server:
+## Features
+
+- Text input with a 5,000-character limit and live counter
+- Audio generation with loading and error states
+- Accessible status and error announcements
+- Audio player with keyboard-accessible volume control
+- Automatic cleanup of generated blob URLs
+- Server-side request validation with Zod
+
+## Setup
+
+### 1. Install dependencies
+
+```bash
+npm install
+```
+
+### 2. Add an ElevenLabs API key
+
+Copy the example environment file:
+
+```bash
+cp .env.local.example .env.local
+```
+
+Then replace the placeholder in `.env.local` with your ElevenLabs API key:
+
+```env
+ELEVENLABS_API_KEY=your_elevenlabs_api_key
+```
+
+Never commit `.env.local`. It is already included in `.gitignore`.
+
+### 3. Start the development server
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Available commands
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run dev
+npm run lint
+npm run format
+```
 
-## Learn More
+## Tech stack
 
-To learn more about Next.js, take a look at the following resources:
+- Next.js with the App Router
+- React and TypeScript
+- Tailwind CSS
+- Zod
+- ElevenLabs Text-to-Speech API using `eleven_multilingual_v2`
+- ESLint and Prettier
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Architecture
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The browser sends text to the local `POST /api/tts` route handler. The route validates the request with Zod, reads `ELEVENLABS_API_KEY` from server-side environment variables, and then calls ElevenLabs. It returns the generated MP3 stream to the client.
 
-## Deploy on Vercel
+The ElevenLabs request is intentionally server-side: placing the API key in client-side code would expose it to anyone using the application. The client hook only calls the local API route and turns the returned audio blob into an object URL for the player.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## AI-assisted development
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This project was developed with AI coding assistance under developer supervision. The repository's `AGENTS.md` file provides persistent project instructions, including the technology stack, security rules, code organization, and staged work plan.
+
+Task-specific prompts were used to guide individual changes. Each change was reviewed and verified with the development server, TypeScript checks, ESLint, and Prettier. Secrets such as `ELEVENLABS_API_KEY` are kept only in `.env.local` and are never included in the repository or shared with the client.
+
+## Possible extensions
+
+- Add a voice selector and persist the selected voice in `localStorage`
+- Add a dedicated download button with a chosen filename
+- Add a history of generated audio clips
+- Add a light and dark theme toggle
+- Add tests
+- Add rate limiting or authentication to protect API usage
+- Add Speech-to-Text (STT) to transcribe uploaded audio into text
