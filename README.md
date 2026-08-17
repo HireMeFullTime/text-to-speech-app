@@ -24,7 +24,7 @@ npm install
 Copy the example environment file:
 
 ```bash
-Copy-Item .env.local.example .env.local
+cp .env.local.example .env.local
 ```
 
 Then replace the placeholder in `.env.local` with your ElevenLabs API key:
