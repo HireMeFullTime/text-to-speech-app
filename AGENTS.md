@@ -72,5 +72,4 @@ Work through these in order, one branch/commit per stage:
 7. **Deploy** — push to Vercel, add env var `ELEVENLABS_API_KEY` in Vercel (Settings → Environment Variables), verify the deployed build succeeds there.
 
 Stage 5 can be skipped if closing the project quickly matters more.
-
 <!-- END:nextjs-agent-rules -->
