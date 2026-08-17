@@ -66,6 +66,12 @@ The browser sends text to the local `POST /api/tts` route handler. The route val
 
 The ElevenLabs request is intentionally server-side: placing the API key in client-side code would expose it to anyone using the application. The client hook only calls the local API route and turns the returned audio blob into an object URL for the player.
 
+## AI-assisted development
+
+This project was developed with AI coding assistance under developer supervision. The repository's `AGENTS.md` file provides persistent project instructions, including the technology stack, security rules, code organization, and staged work plan.
+
+Task-specific prompts were used to guide individual changes. Each change was reviewed and verified with the development server, TypeScript checks, ESLint, and Prettier. Secrets such as `ELEVENLABS_API_KEY` are kept only in `.env.local` and are never included in the repository or shared with the client.
+
 ## Possible extensions
 
 - Add a voice selector and persist the selected voice in `localStorage`
