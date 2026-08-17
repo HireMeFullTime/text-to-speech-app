@@ -43,14 +43,14 @@ export default function Home() {
       <section className="w-full max-w-2xl rounded-xl bg-white p-6 shadow-sm sm:p-8">
         <h1 className="text-3xl font-bold">Text to Speech</h1>
         <p className="mt-2 text-zinc-600">
-          Wklej tekst i wygeneruj nagranie audio za pomocą ElevenLabs.
+          Paste text and generate an audio recording with ElevenLabs.
         </p>
 
         <form className="mt-8 space-y-5" onSubmit={handleSubmit}>
           <div>
             <div className="flex items-center justify-between gap-4">
               <label className="font-medium" htmlFor="text">
-                Tekst do konwersji
+                Text to convert
               </label>
               <span className="text-sm text-zinc-500">
                 {text.length} / {MAX_TEXT_LENGTH}
@@ -61,7 +61,7 @@ export default function Home() {
               id="text"
               maxLength={MAX_TEXT_LENGTH}
               onChange={(event) => setText(event.target.value)}
-              placeholder="Wpisz tekst, który chcesz zamienić na mowę..."
+              placeholder="Enter text to convert to speech..."
               value={text}
             />
           </div>
@@ -77,15 +77,13 @@ export default function Home() {
                 className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"
               />
             )}
-            {isLoading ? 'Generowanie audio...' : 'Generuj audio'}
+            {isLoading ? 'Generating audio...' : 'Generate audio'}
           </button>
         </form>
 
         <div aria-live="polite" className="mt-5" role="status">
-          {isLoading && <p>Generowanie audio…</p>}
-          {audioUrl && !isLoading && !error && (
-            <p>Audio jest gotowe do odtworzenia.</p>
-          )}
+          {isLoading && <p>Generating audio…</p>}
+          {audioUrl && !isLoading && !error && <p>Audio is ready to play.</p>}
         </div>
 
         {error && (
@@ -97,11 +95,11 @@ export default function Home() {
         {audioUrl && (
           <div className="mt-5">
             <audio ref={audioRef} className="w-full" controls src={audioUrl}>
-              Twoja przeglądarka nie obsługuje odtwarzania audio.
+              Your browser does not support audio playback.
             </audio>
             <div className="mt-4">
               <label className="block font-medium" htmlFor="volume">
-                Głośność: {Math.round(volume * 100)}%
+                Volume: {Math.round(volume * 100)}%
               </label>
               <input
                 aria-valuetext={`${Math.round(volume * 100)}%`}

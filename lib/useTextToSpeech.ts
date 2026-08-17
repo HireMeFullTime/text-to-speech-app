@@ -15,7 +15,7 @@ function getErrorMessage(data: unknown): string {
     return data.error;
   }
 
-  return 'Nie udało się wygenerować audio. Spróbuj ponownie.';
+  return 'Unable to generate audio. Please try again.';
 }
 
 export function useTextToSpeech(): UseTextToSpeechResult {
@@ -62,7 +62,7 @@ export function useTextToSpeech(): UseTextToSpeechResult {
         audioUrlRef.current = nextAudioUrl;
         setAudioUrl(nextAudioUrl);
       } catch {
-        setError('Nie udało się wygenerować audio. Spróbuj ponownie.');
+        setError('Unable to generate audio. Please try again.');
       } finally {
         setIsLoading(false);
       }
