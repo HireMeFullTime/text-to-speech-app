@@ -70,7 +70,9 @@ export default function Home() {
             <span className="sr-only">Toggle dark mode</span>
             <span
               className={`absolute left-1 h-5 w-5 rounded-full bg-white shadow-sm transition-transform duration-200 dark:translate-x-5 dark:bg-zinc-950 sm:h-6 sm:w-6 sm:dark:translate-x-6 ${
-                resolvedTheme === 'dark' ? 'translate-x-5 sm:translate-x-6' : 'translate-x-0'
+                resolvedTheme === 'dark'
+                  ? 'translate-x-5 sm:translate-x-6'
+                  : 'translate-x-0'
               }`}
             />
             <span className="relative z-10 flex w-full items-center justify-between px-1 text-[9px] font-bold text-zinc-500 dark:text-zinc-400 sm:text-[10px]">
