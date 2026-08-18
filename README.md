@@ -10,6 +10,7 @@ A simple Next.js application that converts pasted text into speech with the Elev
 - Audio player with keyboard-accessible volume control
 - Automatic cleanup of generated blob URLs
 - Server-side request validation with Zod
+- Dark/light mode
 
 ## Setup
 
@@ -77,7 +78,7 @@ Task-specific prompts were used to guide individual changes. Each change was rev
 - Add a voice selector and persist the selected voice in `localStorage`
 - Add a dedicated download button with a chosen filename
 - Add a history of generated audio clips
-- Add a light and dark theme toggle
+- ~~Add a light and dark theme toggle~~
 - Add tests
 - Add rate limiting or authentication to protect API usage
 - Add Speech-to-Text (STT) to transcribe uploaded audio into text
